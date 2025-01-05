@@ -7,6 +7,8 @@ int initiate;
 int start;
 int final_count;
 int current_count;
+int increment;
+int decrement;
 unsigned long time;
 void setup() {
   // put your setup code here, to run once:
@@ -26,14 +28,38 @@ void setup() {
   initiate = 100;
   //sevseg.setNumber(0b0000, 2);
  // sevseg.refreshDisplay(); // Must run repeatedly
-  //Serial.begin(9600);
+  Serial.begin(9600);
 }
 
 
 void loop() {
   
+  increment = analogRead(A4);
+  decrement = analogRead(A3);
+  
+  if (increment<500){
+    if (current_count == 55){
+    current_count = 59;
+    }else if (current_count == 59) {
+    current_count = 0;
+    }else {
+    current_count = current_count +5;
+     }
+     } 
+  
+  if (decrement<500){
+    if (current_count == 5){
+    current_count = 59;
+    }else if (current_count == 59){ 
+    current_count = 55;
+    }else{ 
+    current_count = current_count - 5;
+  }  
+
+
   initiate = analogRead(A5);
-  if(initiate<20){
+  Serial.println(increment);
+  if(initiate<50){
     start = 1;
   }
   //Serial.println(start);
@@ -52,10 +78,10 @@ void loop() {
   while(1){
    time = millis();
    last = time - initial;
-   Serial.println(last);
+   //Serial.println(last);
    sevseg.setNumber(current_count, 2);  
    sevseg.refreshDisplay(); // Must run repeatedly 
-  if (last >= 60000){  
+  if (last >= 1000){  
   current_count = current_count - 1;   
   sevseg.setNumber(current_count, 2);  
   sevseg.refreshDisplay(); // Must run repeatedly
@@ -71,6 +97,7 @@ void loop() {
   sevseg.setNumber(current_count, 2);
   sevseg.refreshDisplay(); // Must run repeatedly
   }
+}
   
   
 
