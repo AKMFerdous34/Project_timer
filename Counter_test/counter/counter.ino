@@ -26,6 +26,8 @@ void setup() {
   current_count = 5 ; 
   start = 0;
   initiate = 100;
+  decrement = 500;
+  
   //sevseg.setNumber(0b0000, 2);
  // sevseg.refreshDisplay(); // Must run repeatedly
   Serial.begin(9600);
@@ -35,69 +37,91 @@ void setup() {
 void loop() {
   
   increment = analogRead(A4);
+  initiate = analogRead(A5);
   decrement = analogRead(A3);
   
-  if (increment<500){
+  // delay(200);
+  Serial.println(initiate);
+  if (increment < 100){
     if (current_count == 55){
     current_count = 59;
+    delay(200);
     }else if (current_count == 59) {
-    current_count = 0;
+    current_count = 5;
+    delay(200);
     }else {
-    current_count = current_count +5;
+    current_count = current_count + 5 ;
+    delay(200);
      }
      } 
   
-  if (decrement<500){
+  else if (decrement < 100){
     if (current_count == 5){
     current_count = 59;
-    }else if (current_count == 59){ 
+    delay(200);
+    }
+    else if (current_count == 59){ 
     current_count = 55;
-    }else{ 
-    current_count = current_count - 5;
-  }  
+    delay(200);
+    }
+    else{ 
+    current_count = current_count - 5 ;
+    delay(200);
+    }
+  }    
+// Working upto here
 
-
-  initiate = analogRead(A5);
-  Serial.println(increment);
-  if(initiate<50){
-    start = 1;
-  }
+ 
+  //delay(100);
+  //if(initiate){
+    //start = 1;
+   // delay(200);
+  //}
   //Serial.println(start);
  //
   //sevseg.setNumber(0b0000, 2);
   //sevseg.refreshDisplay(); // Must run repeatedly
-  if (start){
-  //count in seconds
-  time = millis();
-  initial = time;
-  //Serial.println(start);
-  //seconds = time/1000;
-  //test the minutes
-  //seconds = time/60000;
-  // Serial.println(count);
-  while(1){
-   time = millis();
-   last = time - initial;
-   //Serial.println(last);
-   sevseg.setNumber(current_count, 2);  
-   sevseg.refreshDisplay(); // Must run repeatedly 
-  if (last >= 1000){  
-  current_count = current_count - 1;   
-  sevseg.setNumber(current_count, 2);  
-  sevseg.refreshDisplay(); // Must run repeatedly
-  break;
+  else if (initiate < 100 ){
+    //count in seconds
+    time = millis();
+    initial = time;
+    //current_count = 29;
+    //Serial.println(start);
+    //seconds = time/1000;
+    //test the minutes
+    //seconds = time/60000;
+    //Serial.println(count);
+    while(1){
+      time = millis();
+      last = time - initial;
+      //Serial.println(last);
+      sevseg.setNumber(current_count, 2);  
+      sevseg.refreshDisplay(); // Must run repeatedly 
+      if (last >= 1000){  
+        current_count = current_count - 1;   
+        sevseg.setNumber(current_count, 2);  
+        sevseg.refreshDisplay(); // Must run repeatedly
+      }
+      else if (current_count == 0){
+        analogWrite(A0,255);
+        break;
+      }
+
+    }
   }
-  }
-  if (current_count == 0){
-    //sound the alarm
-    analogWrite(A0,255);
-  }
-  }
-  //Serial.println(current_count);
+  // Working here
+  // else if (current_count == 0){
+  //   //sound the alarm
+  //   analogWrite(A0,255);
+  // }
+  
+  //Serial.println(current_count);  
   sevseg.setNumber(current_count, 2);
   sevseg.refreshDisplay(); // Must run repeatedly
-  }
-}
+  }  
+//}
+
+
   
   
 
