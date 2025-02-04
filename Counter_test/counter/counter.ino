@@ -41,7 +41,7 @@ void loop() {
   decrement = analogRead(A3);
   
   // delay(200);
-  Serial.println(initiate);
+  //Serial.println(initiate);
   if (increment < 100){
     if (current_count == 55){
     current_count = 59;
@@ -83,15 +83,18 @@ void loop() {
   //sevseg.refreshDisplay(); // Must run repeatedly
   else if (initiate < 100 ){
     //count in seconds
+    //Serial.println(current_count);
     time = millis();
     initial = time;
     //current_count = 29;
-    //Serial.println(start);
+    //Serial.println(initial);
     //seconds = time/1000;
     //test the minutes
     //seconds = time/60000;
     //Serial.println(count);
+
     while(1){
+      delay(1);
       time = millis();
       last = time - initial;
       //Serial.println(last);
@@ -101,10 +104,12 @@ void loop() {
         current_count = current_count - 1;   
         sevseg.setNumber(current_count, 2);  
         sevseg.refreshDisplay(); // Must run repeatedly
+        last = 0;
+        initial = millis();
       }
       else if (current_count == 0){
         analogWrite(A0,255);
-        break;
+        
       }
 
     }
