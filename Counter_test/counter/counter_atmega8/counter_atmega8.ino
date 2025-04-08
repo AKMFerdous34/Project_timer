@@ -72,7 +72,7 @@ void setup() {
   pinMode(alarm,OUTPUT);
   sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins, resistorsOnSegments, updateWithDelays, leadingZeros, disableDecPoint);
   sevseg.setBrightness(90);
-  //Serial.begin(9600);
+  
   
 }
 
@@ -84,16 +84,13 @@ void loop() {
   while (wait_key_in < 3){
     millis (); // delay required for while loop to not get hung up.
     digitalWrite(alarm,0);
-   // For the hour and second digits, allow 0 - 9
-    
+
+   // For the hour and second digits, allow 0 - 9    
     if (wait_key_in == 0 || wait_key_in == 2){
       key_val=keypad.getKey(); 
       if (key_val != NO_KEY && key_val != keys[3][2] && key_val != keys[3][0]){
-        count_arr = key_val - 48 ; //[wait_key_in] = key_val -48 ; // convert from char to int
-        // if (!wait_key_in){
-        //   current_count = current_count + count_arr;
-        // }
-        // else{
+        count_arr = key_val - 48 ; // convert from char to int
+        
         for ( j; j < wait_key_in; j= j + 1){  
           //pow10 = pow10 * 10;
           pow10 = pow10 / 10;
@@ -128,11 +125,8 @@ void loop() {
       key_val=keypad.getKey(); 
       if (key_val != NO_KEY && key_val != keys[3][2] && key_val != keys[3][0] && key_val != keys[1][2] 
       && key_val != keys[2][0] && key_val != keys[2][1] && key_val != keys[2][2]){
-        count_arr = key_val - 48 ; //[wait_key_in] = key_val -48 ; // convert from char to int
-        // if (!wait_key_in){
-        //   current_count = current_count + count_arr;
-        // }
-        // else{
+        count_arr = key_val - 48 ;  // convert from char to int
+        
         for ( j; j < wait_key_in; j= j + 1){  
           //pow10 = pow10 * 10;
           pow10 = pow10 / 10;
@@ -154,6 +148,8 @@ void loop() {
         delay(50);  
       }
       else if (key_val == keys[3][0]){
+        digitalWrite(alarm,1);
+        delay(50);
         break;     // This portion to enable downcounting after setting the timer partially
 
       }
@@ -186,33 +182,23 @@ void loop() {
     }
 
   else if (key_val == keys[3][0]){
-    //count in seconds
-    //Serial.println(current_count);
+    
     digitalWrite(alarm,1); 
     delay(50); 
     digitalWrite(alarm,0); 
     time = millis();
-    initial = time;    
-    //current_count = 29;
-    //Serial.println(initial);
-    //seconds = time/1000;
-    //test the minutes
-    //seconds = time/60000;
-    //Serial.println(count);
+    initial = time;        
 
     while(1){
       delay(1);
       time = millis();
-      last = time - initial;
-      //Serial.println(last);
+      last = time - initial;      
       sevseg.setNumber(current_count, 2);  
       sevseg.refreshDisplay(); // Must run repeatedly 
       
       key_val=keypad.getKey(); 
-      if (last >= 1000){       // Change this value to 60000 for minute count, 1000 for second count
-        current_count = current_count - 1;   
-       // sevseg.setNumber(current_count, 2);  
-       // sevseg.refreshDisplay(); // Must run repeatedly
+      if (last >= 60000){       // Change this value to 60000 for minute count, 1000 for second count
+        current_count = current_count - 1;          
         last = 0;
         initial = millis();
       }
@@ -235,24 +221,14 @@ void loop() {
       }
 
       else if (current_count == 0){
-        digitalWrite(alarm,1);
-        //break;
+        digitalWrite(alarm,1);        
       }
             
 
     }
   }
-  // Working here
-  // else if (current_count == 0){
-  //   //sound the alarm
-  //   analogWrite(A0,255);
-  // }
-  // if (key_val == keys[3][2]){
-  //   digitalWrite(alarm,0);
-  // }
-  //Serial.println(current_count);  
-  sevseg.setNumber(current_count, 0);
-  //sevseg.blank();
+
+  sevseg.setNumber(current_count, 0);  
   sevseg.refreshDisplay(); // Must run repeatedly
   }
 
@@ -264,48 +240,5 @@ void loop() {
 
 
 
- //Redundant code:
-   
-  // Serial.println(key_val);
- /* if (increment < 100){
-    if (current_count == 55){
-    current_count = 59;
-    delay(200);
-    }else if (current_count == 59) {
-    current_count = 5;
-    delay(200);
-    }else {
-    current_count = current_count + 5 ;
-    delay(200);
-     }
-     } 
-  
-  else if (decrement < 100){
-    if (current_count == 5){
-    current_count = 59;
-    delay(200);
-    }
-    else if (current_count == 59){ 
-    current_count = 55;
-    delay(200);
-    }
-    else{ 
-    current_count = current_count - 5 ;
-    delay(200);
-    }
-  }    
-// Working upto here
-
- 
-  //delay(100);
-  //if(initiate){
-    //start = 1;
-   // delay(200);
-  //}
-  //Serial.println(start);
- //
-  //sevseg.setNumber(0b0000, 2);
-  //sevseg.refreshDisplay(); // Must run repeatedly
-  */ 
 
 
